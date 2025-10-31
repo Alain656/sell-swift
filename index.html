@@ -412,94 +412,6 @@
       box-shadow: 0 8px 20px rgba(0, 85, 204, 0.3);
     }
     
-    .divider {
-      text-align: center;
-      margin: 25px 0;
-      position: relative;
-      opacity: 0;
-      transform: translateY(10px);
-      animation: fadeInUp 0.5s ease 1.8s forwards;
-    }
-    
-    .divider::before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 0;
-      right: 0;
-      height: 1px;
-      background: rgba(0, 0, 0, 0.1);
-    }
-    
-    .divider span {
-      background: rgba(255, 255, 255, 0.85);
-      padding: 0 15px;
-      color: #777;
-    }
-    
-    .social-login {
-      display: flex;
-      gap: 15px;
-      margin-bottom: 25px;
-      opacity: 0;
-      transform: translateY(10px);
-      animation: fadeInUp 0.5s ease 1.9s forwards;
-    }
-    
-    .social-btn {
-      flex: 1;
-      padding: 12px;
-      border: 1px solid rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .social-btn::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 5px;
-      height: 5px;
-      background: rgba(0, 0, 0, 0.1);
-      opacity: 0;
-      border-radius: 100%;
-      transform: scale(1, 1) translate(-50%);
-      transform-origin: 50% 50%;
-    }
-    
-    .social-btn:focus:not(:active)::after {
-      animation: ripple 1s ease-out;
-    }
-    
-    .social-btn:hover {
-      background: rgba(255, 255, 255, 0.9);
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-    
-    .social-btn i {
-      margin-right: 8px;
-      font-size: 18px;
-    }
-    
-    .google-btn {
-      color: #db4437;
-    }
-    
-    .facebook-btn {
-      color: #4267B2;
-    }
-    
     .terms {
       font-size: 14px;
       color: #777;
@@ -1504,10 +1416,6 @@
         padding: 40px 20px;
       }
       
-      .social-login {
-        flex-direction: column;
-      }
-      
       .header {
         flex-direction: column;
         align-items: flex-start;
@@ -1749,19 +1657,6 @@
           
           <button type="submit" class="btn btn-primary" id="loginBtn">Login</button>
           
-          <div class="divider">
-            <span>Or continue with</span>
-          </div>
-          
-          <div class="social-login">
-            <button type="button" class="social-btn google-btn">
-              <i class="fab fa-google"></i> Google
-            </button>
-            <button type="button" class="social-btn facebook-btn">
-              <i class="fab fa-facebook-f"></i> Facebook
-            </button>
-          </div>
-          
           <p class="terms">
             By continuing, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
           </p>
@@ -1805,19 +1700,6 @@
           </div>
           
           <button type="submit" class="btn btn-primary" id="signupBtn">Create Account</button>
-          
-          <div class="divider">
-            <span>Or continue with</span>
-          </div>
-          
-          <div class="social-login">
-            <button type="button" class="social-btn google-btn">
-              <i class="fab fa-google"></i> Google
-            </button>
-            <button type="button" class="social-btn facebook-btn">
-              <i class="fab fa-facebook-f"></i> Facebook
-            </button>
-          </div>
           
           <p class="terms">
             By creating an account, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
@@ -2176,9 +2058,6 @@
       getAuth, 
       createUserWithEmailAndPassword, 
       signInWithEmailAndPassword,
-      signInWithPopup,
-      GoogleAuthProvider,
-      FacebookAuthProvider,
       sendPasswordResetEmail,
       updateProfile,
       signOut,
@@ -2200,10 +2079,6 @@
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const auth = getAuth(app);
-    
-    // Initialize providers
-    const googleProvider = new GoogleAuthProvider();
-    const facebookProvider = new FacebookAuthProvider();
 
     // DOM Elements
     const authContainer = document.getElementById('authContainer');
@@ -2218,8 +2093,6 @@
     const signupBtn = document.getElementById('signupBtn');
     const togglePasswordButtons = document.querySelectorAll('.toggle-password');
     const notification = document.getElementById('notification');
-    const googleButtons = document.querySelectorAll('.google-btn');
-    const facebookButtons = document.querySelectorAll('.facebook-btn');
     const forgotPasswordLink = document.querySelector('.forgot-password');
     
     // Dashboard elements
@@ -2480,70 +2353,6 @@
       } finally {
         setLoading(signupBtn, false);
       }
-    });
-
-    // Google Sign In
-    googleButtons.forEach(button => {
-      button.addEventListener('click', async () => {
-        try {
-          const result = await signInWithPopup(auth, googleProvider);
-          const user = result.user;
-          
-          // Store user data in localStorage
-          localStorage.setItem('sellSwiftUser', JSON.stringify({
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName
-          }));
-          
-          // Initialize user data in localStorage if new user
-          if (!localStorage.getItem('sellSwiftProducts')) {
-            localStorage.setItem('sellSwiftProducts', JSON.stringify([]));
-            localStorage.setItem('sellSwiftTransactions', JSON.stringify([]));
-          }
-          
-          showNotification('Login successful!', 'success');
-          
-          // Show dashboard
-          showDashboard();
-          
-        } catch (error) {
-          console.error('Google sign in error:', error);
-          showNotification('Google sign in failed. Please try again.', 'error');
-        }
-      });
-    });
-
-    // Facebook Sign In
-    facebookButtons.forEach(button => {
-      button.addEventListener('click', async () => {
-        try {
-          const result = await signInWithPopup(auth, facebookProvider);
-          const user = result.user;
-          
-          // Store user data in localStorage
-          localStorage.setItem('sellSwiftUser', JSON.stringify({
-            uid: user.uid,
-            email: user.email,
-            displayName: user.displayName
-          }));
-          
-          // Initialize user data in localStorage if new user
-          if (!localStorage.getItem('sellSwiftProducts')) {
-            localStorage.setItem('sellSwiftProducts', JSON.stringify([]));
-            localStorage.setItem('sellSwiftTransactions', JSON.stringify([]));
-          }
-          
-          showNotification('Login successful!', 'success');
-          
-          // Show dashboard
-          showDashboard();
-          
-        } catch (error) {
-          console.error('Facebook sign in error:', error);
-          showNotification('Facebook sign in failed. Please try again.', 'error');
-        }
-      });
     });
 
     // Forgot Password
@@ -2852,6 +2661,18 @@
       if (!productName || !productCategory || isNaN(productQuantity) || isNaN(costPrice) || isNaN(sellingPrice)) {
         showNotification('Please fill in all required fields', 'error');
         return;
+      }
+      
+      // Check if product with same name already exists (for new products only)
+      if (!editingProductId) {
+        const existingProduct = products.find(p => 
+          p.name.toLowerCase() === productName.toLowerCase() && p.category === productCategory
+        );
+        
+        if (existingProduct) {
+          showNotification('A product with this name and category already exists!', 'error');
+          return;
+        }
       }
       
       // Create product data
