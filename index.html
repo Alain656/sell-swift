@@ -1402,6 +1402,91 @@
       transform: translateY(-1px);
     }
     
+    /* Receipt Modal Styles */
+    .receipt-modal .modal-content {
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .receipt {
+      font-family: 'Courier New', monospace;
+      background: white;
+      padding: 20px;
+      border: 1px dashed #ccc;
+    }
+
+    .receipt-header {
+      text-align: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #000;
+      padding-bottom: 10px;
+    }
+
+    .receipt-header h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .receipt-header p {
+      margin: 5px 0;
+      font-size: 12px;
+    }
+
+    .receipt-details {
+      margin-bottom: 20px;
+    }
+
+    .receipt-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .receipt-total {
+      border-top: 2px solid #000;
+      padding-top: 10px;
+      margin-top: 10px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .receipt-footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
+      border-top: 1px dashed #ccc;
+      padding-top: 10px;
+    }
+
+    .receipt-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .print-btn {
+      background-color: #28a745;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+    }
+
+    .print-btn:hover {
+      background-color: #218838;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+    }
+
     /* Responsive Styles */
     @media (max-width: 768px) {
       .auth-box {
@@ -1453,6 +1538,11 @@
       .transaction-filters input {
         flex: 1;
         min-width: 120px;
+      }
+
+      .receipt-modal .modal-content {
+        width: 95%;
+        max-width: 350px;
       }
     }
     
@@ -1725,13 +1815,6 @@
           </div>
         </div>
         <div class="header-right">
-          <div class="date-filter">
-            <span>View:</span>
-            <select id="timeRange">
-              <option value="7">Last 7 Days</option>
-              <option value="30" selected>Last 30 Days</option>
-            </select>
-          </div>
           <button class="logout-btn" id="dashboardLogoutBtn">
             <i class="fas fa-sign-out-alt"></i> Logout
           </button>
@@ -1762,7 +1845,6 @@
               <th>Quantity</th>
               <th>Cost Price</th>
               <th>Selling Price</th>
-              <th>Profit Margin</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -1770,7 +1852,7 @@
           <tbody id="stockTableBody">
             <!-- Stock data will be populated here -->
             <tr>
-              <td colspan="8" style="text-align: center; padding: 30px;">
+              <td colspan="7" style="text-align: center; padding: 30px;">
                 No products added yet. Click "Add Product" to get started.
               </td>
             </tr>
@@ -1945,103 +2027,157 @@
           <a href="terms.html">Terms</a>
         </p>
       </div>
-    </div>
-    
-    <!-- Add Product Modal -->
-    <div class="modal" id="productModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 id="productModalTitle">Add New Product</h2>
-          <button class="close-modal">&times;</button>
+      
+      <!-- Add Product Modal -->
+      <div class="modal" id="productModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 id="productModalTitle">Add New Product</h2>
+            <button class="close-modal">&times;</button>
+          </div>
+          <form id="productForm">
+            <div class="form-group">
+              <label for="productName">Product Name</label>
+              <input type="text" id="productName" required>
+            </div>
+            <div class="form-group">
+              <label for="productCategory">Category</label>
+              <select id="productCategory" required>
+                <option value="">Select Category</option>
+                <option value="electronics">Electronics</option>
+                <option value="clothing">Clothing</option>
+                <option value="food">Food & Beverages</option>
+                <option value="home">Home & Garden</option>
+                <option value="construction">Construction Materials</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="productQuantity">Quantity</label>
+              <input type="number" id="productQuantity" min="0" required>
+            </div>
+            <div class="form-group">
+              <label for="costPrice">Cost Price (RWF)</label>
+              <input type="number" id="costPrice" min="0" step="0.01" required>
+            </div>
+            <div class="form-group">
+              <label for="sellingPrice">Selling Price (RWF)</label>
+              <input type="number" id="sellingPrice" min="0" step="0.01" required>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary close-modal">Cancel</button>
+              <button type="submit" class="btn btn-primary">Save Product</button>
+            </div>
+          </form>
         </div>
-        <form id="productForm">
-          <div class="form-group">
-            <label for="productName">Product Name</label>
-            <input type="text" id="productName" required>
-          </div>
-          <div class="form-group">
-            <label for="productCategory">Category</label>
-            <select id="productCategory" required>
-              <option value="">Select Category</option>
-              <option value="electronics">Electronics</option>
-              <option value="clothing">Clothing</option>
-              <option value="food">Food & Beverages</option>
-              <option value="home">Home & Garden</option>
-              <option value="construction">Construction Materials</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="productQuantity">Quantity</label>
-            <input type="number" id="productQuantity" min="0" required>
-          </div>
-          <div class="form-group">
-            <label for="costPrice">Cost Price (RWF)</label>
-            <input type="number" id="costPrice" min="0" step="0.01" required>
-          </div>
-          <div class="form-group">
-            <label for="sellingPrice">Selling Price (RWF)</label>
-            <input type="number" id="sellingPrice" min="0" step="0.01" required>
-          </div>
-          <div class="form-actions">
-            <button type="button" class="btn btn-secondary close-modal">Cancel</button>
-            <button type="submit" class="btn btn-primary">Save Product</button>
-          </div>
-        </form>
       </div>
-    </div>
-    
-    <!-- Add Transaction Modal -->
-    <div class="modal" id="transactionModal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 id="transactionModalTitle">Add New Transaction</h2>
-          <button class="close-modal">&times;</button>
+      
+      <!-- Add Transaction Modal -->
+      <div class="modal" id="transactionModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 id="transactionModalTitle">Add New Transaction</h2>
+            <button class="close-modal">&times;</button>
+          </div>
+          <form id="transactionForm">
+            <div class="form-group">
+              <label for="transactionType">Transaction Type</label>
+              <select id="transactionType" required>
+                <option value="">Select Type</option>
+                <option value="sale">Sale</option>
+                <option value="expense">Expense</option>
+                <option value="loan">Loan</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="transactionDate">Date</label>
+              <input type="date" id="transactionDate" required>
+            </div>
+            <div class="form-group" id="productSelectGroup" style="display: none;">
+              <label for="transactionProduct">Product</label>
+              <select id="transactionProduct">
+                <!-- Products will be populated here -->
+              </select>
+            </div>
+            <div class="form-group" id="quantitySelectGroup" style="display: none;">
+              <label for="transactionQuantity">Quantity Sold</label>
+              <input type="number" id="transactionQuantity" min="1" value="1">
+            </div>
+            <div class="form-group" id="unitPriceGroup" style="display: none;">
+              <label for="unitPrice">Unit Price (RWF)</label>
+              <input type="number" id="unitPrice" min="0" step="0.01">
+            </div>
+            <div class="form-group" id="amountGroup">
+              <label for="transactionAmount">Amount (RWF)</label>
+              <input type="number" id="transactionAmount" min="0" step="0.01" required>
+            </div>
+            <div class="form-group" id="loanStatusGroup" style="display: none;">
+              <label for="loanStatus">Loan Status</label>
+              <select id="loanStatus">
+                <option value="active">Active</option>
+                <option value="paid">Paid</option>
+              </select>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary close-modal">Cancel</button>
+              <button type="submit" class="btn btn-primary">Save Transaction</button>
+            </div>
+          </form>
         </div>
-        <form id="transactionForm">
-          <div class="form-group">
-            <label for="transactionType">Transaction Type</label>
-            <select id="transactionType" required>
-              <option value="">Select Type</option>
-              <option value="sale">Sale</option>
-              <option value="expense">Expense</option>
-              <option value="loan">Loan</option>
-            </select>
+      </div>
+      
+      <!-- Receipt Modal -->
+      <div class="modal receipt-modal" id="receiptModal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2>Sale Receipt</h2>
+            <button class="close-modal">&times;</button>
           </div>
-          <div class="form-group">
-            <label for="transactionDate">Date</label>
-            <input type="date" id="transactionDate" required>
+          <div class="receipt" id="receiptContent">
+            <div class="receipt-header">
+              <h3 id="receiptBusinessName">SELL SWIFT</h3>
+              <p id="receiptAddress">Business Address</p>
+              <p id="receiptPhone">Phone: +250 7XX XXX XXX</p>
+              <p id="receiptDate">Date: Loading...</p>
+              <p id="receiptReceiptNo">Receipt #: Loading...</p>
+            </div>
+            
+            <div class="receipt-details">
+              <div class="receipt-item">
+                <span>Product:</span>
+                <span id="receiptProductName">-</span>
+              </div>
+              <div class="receipt-item">
+                <span>Quantity:</span>
+                <span id="receiptQuantity">-</span>
+              </div>
+              <div class="receipt-item">
+                <span>Unit Price:</span>
+                <span id="receiptUnitPrice">-</span>
+              </div>
+              <div class="receipt-item">
+                <span>Subtotal:</span>
+                <span id="receiptSubtotal">-</span>
+              </div>
+              <div class="receipt-total">
+                <span>TOTAL:</span>
+                <span id="receiptTotal">-</span>
+              </div>
+            </div>
+            
+            <div class="receipt-footer">
+              <p>Thank you for your purchase!</p>
+              <p>Please keep this receipt for your records</p>
+            </div>
           </div>
-          <div class="form-group" id="productSelectGroup" style="display: none;">
-            <label for="transactionProduct">Product</label>
-            <select id="transactionProduct">
-              <!-- Products will be populated here -->
-            </select>
+          
+          <div class="receipt-actions">
+            <button type="button" class="btn btn-secondary close-modal">Close</button>
+            <button type="button" class="btn print-btn" id="printReceiptBtn">
+              <i class="fas fa-print"></i> Print Receipt
+            </button>
           </div>
-          <div class="form-group" id="quantitySelectGroup" style="display: none;">
-            <label for="transactionQuantity">Quantity Sold</label>
-            <input type="number" id="transactionQuantity" min="1" value="1">
-          </div>
-          <div class="form-group" id="unitPriceGroup" style="display: none;">
-            <label for="unitPrice">Unit Price (RWF)</label>
-            <input type="number" id="unitPrice" min="0" step="0.01">
-          </div>
-          <div class="form-group" id="amountGroup">
-            <label for="transactionAmount">Amount (RWF)</label>
-            <input type="number" id="transactionAmount" min="0" step="0.01" required>
-          </div>
-          <div class="form-group" id="loanStatusGroup" style="display: none;">
-            <label for="loanStatus">Loan Status</label>
-            <select id="loanStatus">
-              <option value="active">Active</option>
-              <option value="paid">Paid</option>
-            </select>
-          </div>
-          <div class="form-actions">
-            <button type="button" class="btn btn-secondary close-modal">Cancel</button>
-            <button type="submit" class="btn btn-primary">Save Transaction</button>
-          </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>
@@ -2099,7 +2235,6 @@
     const dashboardLogoutBtn = document.getElementById('dashboardLogoutBtn');
     const businessNameElement = document.getElementById('businessName');
     const currentMonthElement = document.getElementById('currentMonth');
-    const timeRangeSelect = document.getElementById('timeRange');
     
     // Tab navigation
     const navTabs = document.querySelectorAll('.nav-tab');
@@ -2143,6 +2278,21 @@
     // Other elements
     const insightsContainer = document.getElementById('insightsContainer');
     const productPerformanceBody = document.getElementById('productPerformanceBody');
+    
+    // Receipt elements
+    const receiptModal = document.getElementById('receiptModal');
+    const receiptContent = document.getElementById('receiptContent');
+    const receiptBusinessName = document.getElementById('receiptBusinessName');
+    const receiptAddress = document.getElementById('receiptAddress');
+    const receiptPhone = document.getElementById('receiptPhone');
+    const receiptDate = document.getElementById('receiptDate');
+    const receiptReceiptNo = document.getElementById('receiptReceiptNo');
+    const receiptProductName = document.getElementById('receiptProductName');
+    const receiptQuantity = document.getElementById('receiptQuantity');
+    const receiptUnitPrice = document.getElementById('receiptUnitPrice');
+    const receiptSubtotal = document.getElementById('receiptSubtotal');
+    const receiptTotal = document.getElementById('receiptTotal');
+    const printReceiptBtn = document.getElementById('printReceiptBtn');
     
     // Modal elements
     const closeModalButtons = document.querySelectorAll('.close-modal');
@@ -2501,17 +2651,14 @@
       
       // Overview functionality
       startMonthBtn.addEventListener('click', initializeMonth);
-      timeRangeSelect.addEventListener('change', () => {
-        analyticsData.timeRange = parseInt(timeRangeSelect.value);
-        if (monthInitialized) {
-          loadAnalyticsData();
-        }
-      });
       
       // Refresh overview button
       refreshOverviewBtn.addEventListener('click', () => {
         refreshOverview();
       });
+      
+      // Print receipt button
+      printReceiptBtn.addEventListener('click', printReceipt);
       
       // Click outside modal to close
       window.addEventListener('click', (e) => {
@@ -2519,6 +2666,9 @@
           closeModals();
         }
         if (e.target === transactionModal) {
+          closeModals();
+        }
+        if (e.target === receiptModal) {
           closeModals();
         }
       });
@@ -2570,7 +2720,7 @@
       if (products.length === 0) {
         stockTableBody.innerHTML = `
           <tr>
-            <td colspan="8" style="text-align: center; padding: 30px;">
+            <td colspan="7" style="text-align: center; padding: 30px;">
               No products added yet. Click "Add Product" to get started.
             </td>
           </tr>
@@ -2581,8 +2731,6 @@
       products.forEach((product, index) => {
         const status = product.quantity > 0 ? 'In Stock' : 'Out of Stock';
         const statusClass = product.quantity > 0 ? 'profit-positive' : 'profit-negative';
-        const profitMargin = product.sellingPrice > 0 ? 
-          ((product.sellingPrice - product.costPrice) / product.sellingPrice * 100).toFixed(1) + '%' : '0%';
         
         const row = document.createElement('tr');
         row.style.opacity = '0';
@@ -2595,7 +2743,6 @@
           <td>${product.quantity}</td>
           <td>RWF ${formatNumber(product.costPrice)}</td>
           <td>RWF ${formatNumber(product.sellingPrice)}</td>
-          <td>${profitMargin}</td>
           <td class="${statusClass}">${status}</td>
           <td>
             <div class="stock-actions">
@@ -2648,8 +2795,6 @@
     }
     
     function saveProduct() {
-      console.log("Saving product...");
-      
       // Get form values
       const productName = document.getElementById('productName').value;
       const productCategory = document.getElementById('productCategory').value;
@@ -2685,8 +2830,6 @@
         sellingPrice: sellingPrice,
         createdAt: new Date().toISOString()
       };
-      
-      console.log("Product data to save:", productData);
       
       try {
         if (editingProductId) {
@@ -2972,6 +3115,9 @@
           product.quantity -= quantity;
           saveProducts();
           loadProducts();
+          
+          // Generate receipt for this sale
+          generateReceipt(transactionData, product);
         }
       }
       
@@ -3053,8 +3199,148 @@
     function closeModals() {
       productModal.classList.remove('show');
       transactionModal.classList.remove('show');
+      receiptModal.classList.remove('show');
       editingProductId = null;
       editingTransactionId = null;
+    }
+    
+    // Receipt Functions
+    function generateReceipt(transactionData, product) {
+      // Set receipt data
+      const userData = JSON.parse(localStorage.getItem('sellSwiftUser') || '{}');
+      receiptBusinessName.textContent = userData.businessName || "SELL SWIFT";
+      
+      // Format date
+      const saleDate = new Date(transactionData.date);
+      receiptDate.textContent = `Date: ${saleDate.toLocaleDateString()} ${saleDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+      
+      // Generate receipt number
+      const receiptNumber = `REC-${transactionData.id.slice(-6).toUpperCase()}`;
+      receiptReceiptNo.textContent = `Receipt #: ${receiptNumber}`;
+      
+      // Set product details
+      receiptProductName.textContent = product.name;
+      receiptQuantity.textContent = transactionData.quantity;
+      receiptUnitPrice.textContent = `RWF ${formatNumber(transactionData.unitPrice)}`;
+      receiptSubtotal.textContent = `RWF ${formatNumber(transactionData.amount)}`;
+      receiptTotal.textContent = `RWF ${formatNumber(transactionData.amount)}`;
+      
+      // Show receipt modal
+      receiptModal.classList.add('show');
+    }
+
+    function printReceipt() {
+      const printWindow = window.open('', '', 'width=400,height=600');
+      const receiptHtml = `
+        <html>
+        <head>
+          <title>Receipt - ${receiptBusinessName.textContent}</title>
+          <style>
+            body {
+              font-family: 'Courier New', monospace;
+              padding: 20px;
+              margin: 0;
+            }
+            .receipt {
+              width: 100%;
+            }
+            .receipt-header {
+              text-align: center;
+              margin-bottom: 20px;
+              border-bottom: 1px solid #000;
+              padding-bottom: 10px;
+            }
+            .receipt-header h3 {
+              margin: 0;
+              font-size: 18px;
+            }
+            .receipt-header p {
+              margin: 5px 0;
+              font-size: 12px;
+            }
+            .receipt-details {
+              margin-bottom: 20px;
+            }
+            .receipt-item {
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 8px;
+              font-size: 14px;
+            }
+            .receipt-total {
+              border-top: 2px solid #000;
+              padding-top: 10px;
+              margin-top: 10px;
+              font-weight: bold;
+              display: flex;
+              justify-content: space-between;
+            }
+            .receipt-footer {
+              text-align: center;
+              margin-top: 20px;
+              font-size: 12px;
+              border-top: 1px dashed #ccc;
+              padding-top: 10px;
+            }
+            @media print {
+              body {
+                padding: 0;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="receipt">
+            <div class="receipt-header">
+              <h3>${receiptBusinessName.textContent}</h3>
+              <p>${receiptAddress.textContent}</p>
+              <p>${receiptPhone.textContent}</p>
+              <p>${receiptDate.textContent}</p>
+              <p>${receiptReceiptNo.textContent}</p>
+            </div>
+            
+            <div class="receipt-details">
+              <div class="receipt-item">
+                <span>Product:</span>
+                <span>${receiptProductName.textContent}</span>
+              </div>
+              <div class="receipt-item">
+                <span>Quantity:</span>
+                <span>${receiptQuantity.textContent}</span>
+              </div>
+              <div class="receipt-item">
+                <span>Unit Price:</span>
+                <span>${receiptUnitPrice.textContent}</span>
+              </div>
+              <div class="receipt-item">
+                <span>Subtotal:</span>
+                <span>${receiptSubtotal.textContent}</span>
+              </div>
+              <div class="receipt-total">
+                <span>TOTAL:</span>
+                <span>${receiptTotal.textContent}</span>
+              </div>
+            </div>
+            
+            <div class="receipt-footer">
+              <p>Thank you for your purchase!</p>
+              <p>Please keep this receipt for your records</p>
+            </div>
+          </div>
+          <script>
+            window.onload = function() {
+              window.print();
+              setTimeout(function() {
+                window.close();
+              }, 1000);
+            };
+          <\/script>
+        </body>
+        </html>
+      `;
+      
+      printWindow.document.write(receiptHtml);
+      printWindow.document.close();
     }
     
     // Overview functionality
@@ -3129,6 +3415,9 @@
       
       // Get sales from transactions
       analyticsData.sales = transactions.filter(t => t.type === 'sale');
+      
+      // Set default time range to 30 days (since we removed the dropdown)
+      analyticsData.timeRange = 30;
       
       processAnalyticsData();
       hideLoading();
